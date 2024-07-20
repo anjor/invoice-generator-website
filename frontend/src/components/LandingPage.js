@@ -1,17 +1,42 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FaFileInvoiceDollar, FaCloudDownloadAlt, FaUserClock, FaStar, FaEllipsisH } from 'react-icons/fa';
 
 function LandingPage() {
     const [email, setEmail] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically send the email to your backend
-        console.log('Email submitted:', email);
-        setIsSubmitted(true);
-        setEmail('');
+        setError('');
+        setIsSubmitted(false);
+
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}/join_waitlist`,
+                { email: email },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                setIsSubmitted(true);
+                setEmail('');
+            } else {
+                setError('An unexpected error occurred. Please try again.');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setError('This email is already on the waitlist or is invalid.');
+            } else {
+                setError('An error occurred. Please try again later.');
+            }
+        }
     };
 
     return (
@@ -82,6 +107,7 @@ function LandingPage() {
                 ) : (
                     <p className="success-message">Thanks for joining! We'll keep you updated.</p>
                 )}
+                {error && <p className="error-message">{error}</p>}
             </section>
         </div>
     );

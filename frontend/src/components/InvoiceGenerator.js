@@ -37,9 +37,13 @@ function InvoiceGenerator() {
     setSuccess(false);
 
     try {
-      const response = await axios.post('http://localhost:8000/generate_invoice', formData, {
-        responseType: 'blob',
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/generate_invoice`,
+        formData,
+        {
+          responseType: 'blob',
+        }
+      );
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -99,116 +103,4 @@ function InvoiceGenerator() {
                 />
               ))}
             </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Currency</Form.Label>
-              <Form.Select
-                name="currency"
-                value={formData.currency}
-                onChange={handleChange}
-              >
-                <option value="USD">USD</option>
-                <option value="GBP">GBP</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Unit of Work</Form.Label>
-              <Form.Select
-                name="unit_of_work"
-                value={formData.unit_of_work}
-                onChange={handleChange}
-              >
-                <option value="HOURLY">Hourly</option>
-                <option value="DAILY">Daily</option>
-                <option value="WEEKLY">Weekly</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Client Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="client_name"
-                value={formData.client_name}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Client Address</Form.Label>
-              {formData.client_address.map((address, index) => (
-                <Form.Control
-                  key={index}
-                  type="text"
-                  value={address}
-                  onChange={(e) => handleChange(e, index, 'client_address')}
-                  className="mb-2"
-                  required
-                />
-              ))}
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Invoice Number</Form.Label>
-              <Form.Control
-                type="text"
-                name="invoice_number"
-                value={formData.invoice_number}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Date</Form.Label>
-              <Form.Control
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Row>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Hours/Days/Weeks</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="hours"
-                    value={formData.hours}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Rate</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="rate"
-                    value={formData.rate}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-
-        <Button variant="primary" type="submit">
-          Generate Invoice
-        </Button>
-      </Form>
-    </Container>
-  );
-}
-
-export default InvoiceGenerator;
+            export default InvoiceGenerator;
