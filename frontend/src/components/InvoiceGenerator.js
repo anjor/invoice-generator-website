@@ -103,8 +103,104 @@ function InvoiceGenerator() {
                 />
               ))}
             </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Currency</Form.Label>
+              <Form.Select
+                name="currency"
+                value={formData.currency}
+                onChange={handleChange}
+              >
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                {/* Add more currency options as needed */}
+              </Form.Select>
+            </Form.Group>
           </Col>
-          {/* Add your second column here if needed */}
+
+          <Col md={6}>
+            <Form.Group className="mb-3">
+              <Form.Label>Client Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="client_name"
+                value={formData.client_name}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Client Address</Form.Label>
+              {formData.client_address.map((address, index) => (
+                <Form.Control
+                  key={index}
+                  type="text"
+                  value={address}
+                  onChange={(e) => handleChange(e, index, 'client_address')}
+                  className="mb-2"
+                  required
+                />
+              ))}
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Unit of Work</Form.Label>
+              <Form.Select
+                name="unit_of_work"
+                value={formData.unit_of_work}
+                onChange={handleChange}
+              >
+                <option value="HOURLY">Hourly</option>
+                <option value="DAILY">Daily</option>
+                <option value="WEEKLY">Weekly</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Invoice Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="invoice_number"
+                value={formData.invoice_number}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Date</Form.Label>
+              <Form.Control
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Hours/Days/Weeks</Form.Label>
+              <Form.Control
+                type="number"
+                name="hours"
+                value={formData.hours}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Rate</Form.Label>
+              <Form.Control
+                type="number"
+                name="rate"
+                value={formData.rate}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
         </Row>
         <Button variant="primary" type="submit">
           Generate Invoice

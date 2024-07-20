@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Response, Depends, Security
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader
