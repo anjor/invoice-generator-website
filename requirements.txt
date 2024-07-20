@@ -1,2 +1,0 @@
-fastapi==0.111.0
-reportlab==4.2.2

@@ -11,3 +11,69 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.upcoming-features .feature {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.upcoming-features .feature-icon {
+  font-size: 2.5rem;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.upcoming-features h3 {
+  margin-bottom: 0.5rem;
+}
+
+.waitlist {
+  background-color: #f8f9fa;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.waitlist h2 {
+  margin-bottom: 1rem;
+}
+
+.waitlist form {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.waitlist input[type="email"] {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem 0 0 0.25rem;
+  width: 300px;
+}
+
+.waitlist button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 0 0.25rem 0.25rem 0;
+  cursor: pointer;
+}
+
+.waitlist button:hover {
+  background-color: #0056b3;
+}
+
+.waitlist .success-message {
+  color: #28a745;
+  font-weight: bold;
+}

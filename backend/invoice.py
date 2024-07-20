@@ -1,39 +1,14 @@
-from fastapi import FastAPI, HTTPException, Response
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_RIGHT, TA_LEFT
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 from reportlab.platypus.flowables import HRFlowable
+
+
 from io import BytesIO
-from typing import List
 
-app = FastAPI()
-
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
-
-
-class InvoiceRequest(BaseModel):
-    company_name: str
-    company_address: List[str]
-    bank_details: List[str]
-    client_name: str
-    client_address: List[str]
-    currency: str = "USD"
-    unit_of_work: str = "HOURLY"
-    invoice_number: str
-    date: str
-    hours: float
-    rate: float
+from data_types import InvoiceRequest
 
 
 def generate_invoice(invoice_data: InvoiceRequest):
@@ -183,23 +158,3 @@ def generate_invoice(invoice_data: InvoiceRequest):
     doc.build(elements)
     buffer.seek(0)
     return buffer
-
-
-@app.post("/generate_invoice")
-async def create_invoice(invoice_request: InvoiceRequest):
-    try:
-        pdf_buffer = generate_invoice(invoice_request)
-        return Response(pdf_buffer.getvalue(), media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=invoice.pdf"})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.get("/healthcheck")
-async def healthcheck():
-    return {"message": "I am alive!"}
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
