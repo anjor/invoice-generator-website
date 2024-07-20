@@ -19,6 +19,7 @@ function InvoiceGenerator() {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [pdfBlob, setPdfBlob] = useState(null);
 
   const handleChange = (e, index, field) => {
     const { name, value } = e.target;
@@ -35,6 +36,7 @@ function InvoiceGenerator() {
     e.preventDefault();
     setError('');
     setSuccess(false);
+    setPdfBlob(null);
 
     try {
       const response = await axios.post(
@@ -45,15 +47,22 @@ function InvoiceGenerator() {
         }
       );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      setPdfBlob(new Blob([response.data], { type: 'application/pdf' }));
+      setSuccess(true);
+    } catch (error) {
+      setError('An error occurred while generating the invoice.');
+    }
+  };
+
+  const handleDownload = () => {
+    if (pdfBlob) {
+      const url = window.URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'invoice.pdf');
       document.body.appendChild(link);
       link.click();
-      setSuccess(true);
-    } catch (error) {
-      setError('An error occurred while generating the invoice.');
+      link.parentNode.removeChild(link);
     }
   };
 
