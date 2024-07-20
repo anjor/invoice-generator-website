@@ -103,4 +103,15 @@ function InvoiceGenerator() {
                 />
               ))}
             </Form.Group>
-            export default InvoiceGenerator;
+          </Col>
+          {/* Add your second column here if needed */}
+        </Row>
+        <Button variant="primary" type="submit">
+          Generate Invoice
+        </Button>
+      </Form>
+    </Container>
+  );
+}
+
+export default InvoiceGenerator;
