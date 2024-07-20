@@ -1,6 +1,8 @@
-from fastapi import FastAPI, HTTPException, Response, Depends
+from fastapi import FastAPI, HTTPException, Response, Depends, Security
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
+from typing import List
 from data_types import InvoiceRequest, WaitlistRequest
 from invoice import generate_invoice
 from db import get_db, WaitlistEntry, create_tables
@@ -19,6 +21,16 @@ app.add_middleware(
 # Create database tables
 create_tables()
 
+# API Key setup
+API_KEY = os.getenv("API_KEY")
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+
+async def get_api_key(api_key: str = Security(api_key_header)):
+    if api_key == API_KEY:
+        return api_key
+    raise HTTPException(status_code=403, detail="Could not validate API Key")
+
 
 @app.post("/join_waitlist")
 async def join_waitlist(
@@ -34,6 +46,14 @@ async def join_waitlist(
         raise HTTPException(
             status_code=400, detail="Email already exists or other error occurred"
         )
+
+
+@app.get("/get_waitlist", response_model=List[str])
+async def get_waitlist(
+    db: Session = Depends(get_db), api_key: str = Depends(get_api_key)
+):
+    entries = db.query(WaitlistEntry).all()
+    return [entry.email for entry in entries]
 
 
 @app.post("/generate_invoice")
