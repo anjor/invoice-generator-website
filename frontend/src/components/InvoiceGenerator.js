@@ -215,6 +215,15 @@ function InvoiceGenerator() {
           Generate Invoice
         </Button>
       </Form>
+      {pdfBlob && (
+        <Button
+          variant="success"
+          onClick={handleDownload}
+          className="mt-3"
+        >
+          Download Invoice PDF
+        </Button>
+      )}
     </Container>
   );
 }
